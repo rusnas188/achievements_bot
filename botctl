@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Добавить в PATH, использовать botctl start/stop/restart/status
+
+BOT_DIR="/home/boardgamebot/board_game_bot"
+COMPOSE="docker compose -f $BOT_DIR/docker-compose.yml"
+
+remove_old_image() {
+    if docker image inspect achievements-bot:latest > /dev/null 2>&1; then
+        echo "Образ achievements-bot существует, удаляю..."
+        docker image rm -f achievements-bot:latest
+    fi
+}
+
+case "$1" in
+  start)
+    (remove_old_image; cd $BOT_DIR && $COMPOSE up -d)
+    ;;
+  stop)
+    (cd $BOT_DIR && $COMPOSE down)
+    ;;
+  restart)
+    (cd $BOT_DIR && $COMPOSE down; remove_old_image; $COMPOSE up -d)
+    ;;
+  status)
+    (cd $BOT_DIR && $COMPOSE ps)
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart|status}"
+    exit 1
+    ;;
+esac

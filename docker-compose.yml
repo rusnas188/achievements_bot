@@ -1,0 +1,8 @@
+services:
+  bot:
+    build: .
+    image: achievements-bot:latest
+    container_name: achievements-bot
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
