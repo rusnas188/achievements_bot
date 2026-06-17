@@ -617,6 +617,7 @@ async def confirm_multi(callback: types.CallbackQuery, state: FSMContext):
 # Keyboards
 # =========================
 def build_admin_menu(user_id: int) -> InlineKeyboardMarkup:
+    print(SETTINGS.admin_tg_id, user_id)
     if user_id == SETTINGS.admin_tg_id:
         keyboard = [
             [InlineKeyboardButton(text="➕ Создать ачивку", callback_data=AdminActionCb(action="add_achievement").pack()),
@@ -1300,7 +1301,7 @@ async def process_achievement_selection(callback: types.CallbackQuery, callback_
                 try:
                     await callback.bot.send_message(
                         chat_id=target_user_id,
-                        text=f"🎉 Поздравляем! Вам выдана новая ачивка:\n\n🏅 *{ach.title}* \[{'+' if ach.points > 0 else ''}{pts_form(ach.points)}]\n",
+                        text=f"🎉 Поздравляем! Вам выдана новая ачивка:\n\n🏅 *{ach.title}* \\[{'+' if ach.points > 0 else ''}{pts_form(ach.points)}]\n",
                         parse_mode="Markdown"
                     )
                     await callback.message.edit_text(
@@ -1332,7 +1333,7 @@ async def process_achievement_selection(callback: types.CallbackQuery, callback_
                     await callback.bot.send_message(
                         chat_id=target_user_id,
                         text=(
-                            f"⚠️ У вас отозвана ачивка:\n\n🏅 *{ach.title}* \[{'+' if ach.points > 0 else ''}{pts_form(ach.points)}]\n"
+                            f"⚠️ У вас отозвана ачивка:\n\n🏅 *{ach.title}* \\[{'+' if ach.points > 0 else ''}{pts_form(ach.points)}]\n"
                         ),
                         parse_mode="Markdown"
                     )

@@ -93,6 +93,16 @@ def back_to_previous_kb():
 async def show_seasons(callback: types.CallbackQuery, state: FSMContext):
     db = SessionLocal()
     try:
+        user = db.query(User).filter_by(
+            tg_id=callback.from_user.id
+        ).first()
+
+        if not user:
+            return await callback.message.edit_text(
+                "Ты ещё не зарегистрирован. Напиши /start",
+                reply_markup=None
+            )
+    
         seasons = (
             db.query(Season)
             .filter(Season.is_active == False)

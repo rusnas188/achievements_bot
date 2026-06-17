@@ -48,6 +48,11 @@ class SeasonUserStat(Base):
     __table_args__ = (
         UniqueConstraint("season_id", "user_id", name="uq_season_user_once"),
     )
+    
+    user = relationship(
+        "User",
+        back_populates="season_stats"
+    )
 
     @property
     def total_points(self):
@@ -83,6 +88,13 @@ class User(Base):
 
     attendance_logs = relationship(
         "AttendanceLog",
+        back_populates="user",
+        cascade="all, delete-orphan",
+        passive_deletes=True
+    )
+    
+    season_stats = relationship(
+        "SeasonUserStat",
         back_populates="user",
         cascade="all, delete-orphan",
         passive_deletes=True
